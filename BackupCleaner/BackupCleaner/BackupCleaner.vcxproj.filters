@@ -21,9 +21,15 @@
     <ClInclude Include="MainWindow.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="FolderContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FolderContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

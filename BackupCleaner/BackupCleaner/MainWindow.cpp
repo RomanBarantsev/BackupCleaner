@@ -3,7 +3,7 @@
 
 using namespace BackupCleaner;
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int WINAPI WinMain(HINSTANCE ,HINSTANCE, LPSTR, int) {
     Application::SetCompatibleTextRenderingDefault(false);
     Application::EnableVisualStyles();
     Application::Run(gcnew MainWindow());
