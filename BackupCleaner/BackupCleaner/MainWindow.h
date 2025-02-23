@@ -62,7 +62,7 @@ namespace BackupCleaner {
 			this->ResumeLayout(false);
 			//----- FOLDER CONTAINER
 			this->Text = "Dynamic Containers Example";
-			this->Size = System::Drawing::Size(400, 400);
+			this->Size = System::Drawing::Size(800, 400);
 			int yOffset = 20; // Initial Y position
 			DynamicWinForms::FolderContainer^ container = gcnew DynamicWinForms::FolderContainer(yOffset);
 			DynamicWinForms::FolderContainer^ container2 = gcnew DynamicWinForms::FolderContainer(yOffset+50);
