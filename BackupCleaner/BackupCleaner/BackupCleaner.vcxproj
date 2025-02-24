@@ -118,9 +118,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MyForm.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
+    <ClInclude Include="Cleaner.h" />
+    <ClInclude Include="FolderData.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Cleaner.cpp" />
+    <ClCompile Include="FolderData.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
