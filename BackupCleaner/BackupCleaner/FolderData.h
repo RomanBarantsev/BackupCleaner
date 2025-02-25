@@ -1,9 +1,6 @@
 #pragma once
 #include <string>
 
-int main() {
-
-}
 
 struct FolderData
 {
@@ -14,9 +11,7 @@ private:
 	std::string maxSizeTooltip;
 	int countFiles;
 	std::string countFilesTooltip;
-
-	std::string folderPath;
-	
+	std::string folderPath;	
 public:
 	FolderData();
 	~FolderData();

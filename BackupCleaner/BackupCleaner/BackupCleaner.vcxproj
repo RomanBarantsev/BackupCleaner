@@ -78,6 +78,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
@@ -120,10 +121,12 @@
   <ItemGroup>
     <ClInclude Include="Cleaner.h" />
     <ClInclude Include="FolderData.h" />
+    <ClInclude Include="StoreData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cleaner.cpp" />
     <ClCompile Include="FolderData.cpp" />
+    <ClCompile Include="StoreData.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
