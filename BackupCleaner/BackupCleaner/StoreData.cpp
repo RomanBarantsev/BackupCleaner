@@ -23,3 +23,21 @@ inline StoreData::StoreData() {
 inline StoreData::~StoreData() {
 	saveToFile("StoreData.dat");
 }
+
+inline const std::unordered_map<std::string, FolderData> StoreData::GetData()
+{
+    return Folders;
+}
+
+bool StoreData::deleteFolder(std::string Folder)
+{
+    if (Folders.erase(Folder) != 0)
+        return true;
+    return false;
+}
+
+void StoreData::addFolder(std::string path,FolderData folder)
+{
+    Folders.emplace(path,folder);
+}
+

@@ -121,6 +121,7 @@
   <ItemGroup>
     <ClInclude Include="Cleaner.h" />
     <ClInclude Include="FolderData.h" />
+    <ClInclude Include="Main.h" />
     <ClInclude Include="StoreData.h" />
   </ItemGroup>
   <ItemGroup>
