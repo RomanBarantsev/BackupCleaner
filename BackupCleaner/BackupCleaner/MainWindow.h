@@ -56,18 +56,24 @@ namespace BackupCleaner {
 			this->SuspendLayout();
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1375, 729);
-			this->Name = L"MainWindow";
-			this->Text = L"MainWindow";
+			this->ClientSize = System::Drawing::Size(1200, 600);
 			this->ResumeLayout(false);
 			//----- FOLDER CONTAINER
-			this->Text = "Dynamic Containers Example";
-			this->Size = System::Drawing::Size(800, 400);
-			int yOffset = 20; // Initial Y position
+			this->Text = "Backup Deleter";
+			int yOffset = 25; // Initial Y position
+			int yMargin = 75;
+
+			Button^ BtnDeleteFolder;
+			BtnDeleteFolder = gcnew Button();
+			BtnDeleteFolder->Size = System::Drawing::Size(50, 50);
+			BtnDeleteFolder->Location = Point(0, yOffset);
+			BtnDeleteFolder->Text = "Delete Folder";
+
 			DynamicWinForms::FolderContainer^ container = gcnew DynamicWinForms::FolderContainer(yOffset);
-			DynamicWinForms::FolderContainer^ container2 = gcnew DynamicWinForms::FolderContainer(yOffset+50);
+			DynamicWinForms::FolderContainer^ container2 = gcnew DynamicWinForms::FolderContainer(yOffset+ yMargin);
 			this->Controls->Add(container);
-			this->Controls->Add(container2);
+			this->Controls->Add(container2);		
+			this->Controls->Add(BtnDeleteFolder);
 		}
 #pragma endregion
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
