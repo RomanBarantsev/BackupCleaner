@@ -13,6 +13,6 @@ private:
 	std::string countFilesTooltip;
 public:
 	FolderData();
-	~FolderData();
+	~FolderData() {};
 };
 

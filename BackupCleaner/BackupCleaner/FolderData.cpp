@@ -3,7 +3,3 @@
 inline FolderData::FolderData() {
 
 }
-
-inline FolderData::~FolderData() {
-
-}
