@@ -123,12 +123,11 @@
   <ItemGroup>
     <ClInclude Include="Cleaner.h" />
     <ClInclude Include="FolderData.h" />
-    <ClInclude Include="Main.h" />
     <ClInclude Include="StoreData.h" />
+    <ClInclude Include="TxtBoxAndLabel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cleaner.cpp" />
-    <ClCompile Include="FolderData.cpp" />
     <ClCompile Include="StoreData.cpp" />
     <ClInclude Include="FolderContainer.h" />
     <ClInclude Include="MainWindow.h">
@@ -136,7 +135,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FolderContainer.cpp" />
     <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>

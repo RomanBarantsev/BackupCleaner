@@ -1,8 +1,11 @@
-#pragma once
+п»ї#pragma once
 #include <string>
+#include "FolderData.h"
+#include "StoreData.h"
+#include "TxtBoxAndLabel.h"
 
-namespace DynamicWinForms {
-
+namespace BackupCleaner {
+    ref class MainWindow;
     using namespace System;
     using namespace System::Windows::Forms;
     using namespace System::Drawing;
@@ -10,79 +13,79 @@ namespace DynamicWinForms {
 
     public ref class FolderContainer : public Panel {
     private:
+        int elementYSize = 20;
+        Button^ BtnDeleteFolder;
         Button^ BtnSelectFolder;
-        TextBox^ FolderPath;        
-        int elementYSize=20;
-        int xStartPos = 160;
-        int yStartPos = 0;
-        // creating same txt with label(with Tooltip) for maxFile, count of backup files, etc 
-        void TxtBoxAndLabel(const std::string& label, const std::string& toolTipTxt, int& value) {
-            //positioning
-            const int spacing = 5;
-            static const int xSize = 50;
-            static const int ySize = elementYSize;
-            static const int xTextSpacing = spacing+xSize;
-            static const int yTextSpacing = spacing+ySize;
-
-            Label^ lbl;
-            TextBox^ txtbox;
-            ToolTip^ tTip;
-            //lbl
-            lbl = gcnew Label();
-            lbl->Size = System::Drawing::Size(xSize, ySize);
-            lbl->Location = Point(xStartPos, yStartPos);
-            System::String^ sysStr = gcnew System::String(toolTipTxt.c_str());
-            lbl->Text = sysStr;
-
-            //File Size Text
-            txtbox = gcnew TextBox();
-            txtbox->Size = System::Drawing::Size(xSize, ySize);
-            txtbox->Location = Point(xStartPos, yStartPos+yTextSpacing);
-            txtbox->Text = "text";
-            //ToolTip
-            tTip = gcnew ToolTip();
-            tTip->SetToolTip(lbl, "tooltip");
-            this->Controls->Add(txtbox);
-            this->Controls->Add(lbl);
-            xStartPos += xTextSpacing;
-        }
+        TextBox^ FolderPath;
+        String^ key;
+        FolderData* data;
+    public:
+        delegate void DeleteContainerHandler(FolderContainer^ sender); 
+        event DeleteContainerHandler^ OnDeleteContainer;
+        delegate void ChangeContainerKeyHandler(FolderContainer^ sender);
+        event ChangeContainerKeyHandler^ OnChangeContainerKeyContainer;  
 
     public:
-        FolderContainer(int yPos) {
+        FolderContainer(System::String^ folder,FolderData* fdata) {
+            data = fdata;
             this->Size = System::Drawing::Size(500, 70);
-            this->Location = Point(50, yPos);
-            this->AutoScroll = true;
+            this->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+            // Delete button
+            BtnDeleteFolder = gcnew Button();
+            BtnDeleteFolder->Size = System::Drawing::Size(50, 50);
+            BtnDeleteFolder->Location = Point(0, 0);
+            BtnDeleteFolder->Text = "Delete Folder";
+            BtnDeleteFolder->Click += gcnew EventHandler(this, &FolderContainer::OnBtnDeleteDataClick);
+            this->Controls->Add(BtnDeleteFolder);
 
-            //txtBox
+            // TextBox
             FolderPath = gcnew TextBox();
             FolderPath->Size = System::Drawing::Size(150, elementYSize);
-            FolderPath->Location = Point(0, 0);
-            FolderPath->Text = "";
+            FolderPath->Location = Point(50, 0);
+            key = folder;
+            FolderPath->Text = folder;
             FolderPath->ReadOnly = true;
-
-            //btn
-            BtnSelectFolder = gcnew Button();
-            BtnSelectFolder->Size = System::Drawing::Size(150, elementYSize);
-            BtnSelectFolder->Location = Point(0, 25);
-            BtnSelectFolder->Text = "Choose folder";
-            //btn handler
-            BtnSelectFolder->Click += gcnew EventHandler(this, &FolderContainer::OnBtnSelectFolderClick);            
-            
-            std::string test = "test";
-            int val = 1;
-            TxtBoxAndLabel(test,test, val);
-            TxtBoxAndLabel(test,test, val);
-
-            //controls to panel
             this->Controls->Add(FolderPath);
+
+            // Select Folder Button
+            BtnSelectFolder = gcnew Button();
+            BtnSelectFolder->Size = System::Drawing::Size(100, elementYSize);
+            BtnSelectFolder->Location = Point(200, 0);
+            BtnSelectFolder->Text = "Choose folder";
+            BtnSelectFolder->Click += gcnew EventHandler(this, &FolderContainer::OnBtnSelectFolderClick);
             this->Controls->Add(BtnSelectFolder);
+
+            int xStartPos = 60;
+            int yStartPos = 20;
+            int xMargins=20;
+            System::String^ daysTooltip = "days for which files will be stored";
+            //txtlabel
+            TxtBoxAndLabel^ daysTxtLabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos, this, daysTooltip, data->daysToStore, "days");
         }
+
     private:
         void OnBtnSelectFolderClick(Object^ sender, EventArgs^ e) {
             FolderBrowserDialog^ folderDialog = gcnew FolderBrowserDialog();
             if (folderDialog->ShowDialog() == DialogResult::OK) {
-                FolderPath->Text = folderDialog->SelectedPath; // Отображаем путь в текстбоксе
+                FolderPath->Text = folderDialog->SelectedPath;
             }
+            OnChangeContainerKeyContainer(this);
+            key = FolderPath->Text;
+        }
+
+        void OnBtnDeleteDataClick(Object^ sender, EventArgs^ e) {
+            OnDeleteContainer(this);
+        }
+
+    public:
+        System::String^ GetKey() {
+            return  key;
+        }
+        System::String^ GetKeyFromBox() {
+            return FolderPath->Text;
+        }
+        FolderData* GetData() {
+            return data;
         }
     };
 }

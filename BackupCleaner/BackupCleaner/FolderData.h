@@ -4,15 +4,17 @@
 
 struct FolderData
 {
-private:
-	int maxDaysToStore;
-	std::string maxDaysToStoreTooltip;
-	int maxFolderSize;
-	std::string maxFolderSizeTooltip;
-	int countFiles;
-	std::string countFilesTooltip;
 public:
-	FolderData();
-	~FolderData() {};
+	int daysToStore;
+	int folderSize;
+	int countFiles;
+	FolderData(int Days, int Size, int count) {
+		daysToStore = Days;
+		folderSize = Size;
+		countFiles = count;
+	}
+	~FolderData() {
+
+	}
 };
 
