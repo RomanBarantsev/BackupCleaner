@@ -16,11 +16,11 @@ inline void StoreData::loadFromFile(const std::string& filename) {
     }
 }
 
-inline StoreData::StoreData() {
+ StoreData::StoreData() {
 	loadFromFile("StoreData.dat");
 }
 
-inline StoreData::~StoreData() {
+ StoreData::~StoreData() {
 	saveToFile("StoreData.dat");
 }
 
