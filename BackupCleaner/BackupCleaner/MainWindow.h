@@ -58,26 +58,30 @@ namespace BackupCleaner {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1200, 600);
 			this->ResumeLayout(false);
+			
+			// Создаём FlowLayoutPanel
+			FlowLayoutPanel^ flowPanel = gcnew FlowLayoutPanel();
+			flowPanel->Dock = DockStyle::Fill;
+			//flowPanel->AutoScroll = true;  // Включаем прокрутку
+			flowPanel->FlowDirection = FlowDirection::TopDown;  // Элементы вниз
+			flowPanel->WrapContents = false;  // Не переносить элементы
+			this->Controls->Add(flowPanel);
+
 			//----- FOLDER CONTAINER
 			this->Text = "Backup Deleter";
 			int yOffset = 25; // Initial Y position
 			int yMargin = 75;
 
-			Button^ BtnDeleteFolder;
-			BtnDeleteFolder = gcnew Button();
-			BtnDeleteFolder->Size = System::Drawing::Size(50, 50);
-			BtnDeleteFolder->Location = Point(0, yOffset);
-			BtnDeleteFolder->Text = "Delete Folder";
-
-			DynamicWinForms::FolderContainer^ container = gcnew DynamicWinForms::FolderContainer(yOffset);
-			DynamicWinForms::FolderContainer^ container2 = gcnew DynamicWinForms::FolderContainer(yOffset+ yMargin);
-			this->Controls->Add(container);
-			this->Controls->Add(container2);		
-			this->Controls->Add(BtnDeleteFolder);
+			StoreData Folders;
+			FolderData fd(1, "days", 2, "size", 3, "count");
+			Folders.addFolder("c:\temp", fd);            
+			auto data = Folders.GetData();
+			for (const auto& folder : data)
+			{
+				DynamicWinForms::FolderContainer^ container = gcnew DynamicWinForms::FolderContainer(folder.second,yOffset + yMargin);
+				flowPanel->Controls->Add(container);
+			}
 		}
 #pragma endregion
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		
-	}
 };
 }

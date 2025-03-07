@@ -125,11 +125,13 @@
     <ClInclude Include="FolderData.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="StoreData.h" />
+    <ClInclude Include="TxtBoxAndLabel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cleaner.cpp" />
     <ClCompile Include="FolderData.cpp" />
     <ClCompile Include="StoreData.cpp" />
+    <ClCompile Include="TxtBoxAndLabel.cpp" />
     <ClInclude Include="FolderContainer.h" />
     <ClInclude Include="MainWindow.h">
       <FileType>CppForm</FileType>
