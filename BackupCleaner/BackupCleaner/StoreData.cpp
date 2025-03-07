@@ -1,6 +1,6 @@
 #include "StoreData.h"
 
-inline void StoreData::saveToFile(const std::string& filename) {
+ void StoreData::saveToFile(const std::string& filename) {
     std::ofstream file(filename, std::ios::binary);
     if (file.is_open()) {
         file.write((char*)this, sizeof(FolderData));
@@ -8,7 +8,7 @@ inline void StoreData::saveToFile(const std::string& filename) {
     }
 }
 
-inline void StoreData::loadFromFile(const std::string& filename) {
+ void StoreData::loadFromFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::binary);
     if (file.is_open()) {
         file.read((char*)this, sizeof(FolderData));
@@ -17,14 +17,14 @@ inline void StoreData::loadFromFile(const std::string& filename) {
 }
 
  StoreData::StoreData() {
-	loadFromFile("StoreData.dat");
+	//loadFromFile("StoreData.dat");
 }
 
  StoreData::~StoreData() {
-	saveToFile("StoreData.dat");
+	//saveToFile("StoreData.dat");
 }
 
-inline const std::unordered_map<std::string, FolderData> StoreData::GetData()
+const std::unordered_map<std::string, FolderData> StoreData::GetData()
 {
     return Folders;
 }
