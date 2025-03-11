@@ -17,11 +17,11 @@
 }
 
  StoreData::StoreData() {
-	//loadFromFile("StoreData.dat");
+	loadFromFile("StoreData.dat");
 }
 
  StoreData::~StoreData() {
-	//saveToFile("StoreData.dat");
+	saveToFile("StoreData.dat");
 }
 
 const std::unordered_map<std::string, FolderData> StoreData::GetData()
