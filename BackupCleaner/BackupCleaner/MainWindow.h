@@ -78,7 +78,8 @@ namespace BackupCleaner {
 			auto data = Folders.GetData();
 			for (const auto& folder : data)
 			{
-				DynamicWinForms::FolderContainer^ container = gcnew DynamicWinForms::FolderContainer(folder.second,yOffset + yMargin);
+				System::String^ str = System::Convert::ToString(folder.first.c_str());
+				DynamicWinForms::FolderContainer^ container = gcnew DynamicWinForms::FolderContainer(str,folder.second,yOffset + yMargin);
 				flowPanel->Controls->Add(container);
 			}
 		}

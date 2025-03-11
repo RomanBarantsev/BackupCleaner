@@ -3,6 +3,7 @@
 #include "FolderData.h"
 #include "StoreData.h"
 #include "TxtBoxAndLabel.h"
+#include "MainWindow.h"
 
 namespace DynamicWinForms {
 
@@ -18,11 +19,10 @@ namespace DynamicWinForms {
         int yStartPos = 0;
         Button^ BtnDeleteFolder;
         Button^ BtnSelectFolder;
-        TextBox^ FolderPath;
-        // creating same txt with label(with Tooltip) for maxFile, count of backup files, etc       
+        TextBox^ FolderPath; 
 
     public:
-        FolderContainer(FolderData data,int yPos) {
+        FolderContainer(System::String^ folder,FolderData data,int yPos) {
             this->Size = System::Drawing::Size(500, 70);
             this->Location = Point(50, yPos);
             this->AutoScroll = true;            
@@ -55,7 +55,7 @@ namespace DynamicWinForms {
 
             int xStartPos = 50;
             int yStartPos = 25;
-            DynamicWinForms::TxtBoxAndLabel^ txtlabel = gcnew DynamicWinForms::TxtBoxAndLabel(xStartPos, yStartPos,this,data.countFilesTooltip,data.countFiles,"File count");
+            TxtBoxAndLabel^ txtlabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos,this,data.countFilesTooltip,data.countFiles,"File count");
         }
     private:
         void OnBtnSelectFolderClick(Object^ sender, EventArgs^ e) {
