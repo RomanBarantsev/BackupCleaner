@@ -9,23 +9,22 @@ namespace DynamicWinForms {
 
     public ref class TxtBoxAndLabel : public Panel {
     private:
-        int xPos{ 0 }, yPos{ 0 };
-        static const int spacing{ 5 };
+        static const int spacing{ 20 };
         static const int xSize{ 50 };
         static const int ySize{ 25 };
-        static const int xTextSpacing = spacing + xSize;
-        static const int yTextSpacing = spacing + ySize;
-
+        //--------------------------------
+        Label^ lbl;
+        TextBox^ txtbox;
+        ToolTip^ tTip;
+        int& storeValue;
     public:
-        TxtBoxAndLabel(int& xPosition, int& yPosition, Panel^ panel, std::string& tooltip, int& txtBox, std::string label) :
-            xPos(xPosition), yPos(yPosition) {
-            InitializeComponent(panel, tooltip, txtBox, label);
+        TxtBoxAndLabel(int xPosition, int yPosition, Panel^ panel, std::string tooltip, int& txtBox, std::string label) :
+            storeValue(txtBox) {
+            InitializeComponent(xPosition,yPosition,panel, tooltip, txtBox, label);
             }
     private:
-        void InitializeComponent(Panel^ panel, std::string& tooltip, int& txtBox, std::string& label) {
-            Label^ lbl;
-            TextBox^ txtbox;
-            ToolTip^ tTip;
+        void InitializeComponent(int xPos,int yPos,Panel^ panel, std::string& tooltip, int& txtBox, std::string& label) {
+            
             //lbl
             lbl = gcnew Label();
             lbl->Size = System::Drawing::Size(xSize, ySize);
@@ -36,14 +35,28 @@ namespace DynamicWinForms {
             //File Size Text
             txtbox = gcnew TextBox();
             txtbox->Size = System::Drawing::Size(xSize, ySize);
-            txtbox->Location = Point(xPos, yPos + yTextSpacing);
-            txtbox->Text = "text";
+            txtbox->Location = Point(xPos, yPos+ spacing);
+            System::String^ str = System::Convert::ToString(txtBox);
+            txtbox->Text = str;
+            txtbox->Leave += gcnew EventHandler(this, &TxtBoxAndLabel::OnTextBoxLeave);
             //ToolTip
             tTip = gcnew ToolTip();
-            tTip->SetToolTip(lbl, "tooltip");
+            str = System::Convert::ToString(tooltip.c_str());
+            tTip->SetToolTip(lbl,str);
             panel->Controls->Add(txtbox);
             panel->Controls->Add(lbl);
-            xPos += xTextSpacing;
+        }
+        void OnTextBoxLeave(Object^ sender, EventArgs^ e) {
+            TextBox^ tb = safe_cast<TextBox^>(sender);
+            int newValue;
+            if (Int32::TryParse(txtbox->Text, newValue)) {
+                storeValue = newValue;  // Записываем значение
+                MessageBox::Show("Новое значение: " + storeValue);
+            }
+            else {
+                MessageBox::Show("Ошибка! Введите число.");
+                txtbox->Text = storeValue.ToString();  // Восстанавливаем старое значение
+            }
         }
     };
 
