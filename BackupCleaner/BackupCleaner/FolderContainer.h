@@ -55,7 +55,9 @@ namespace DynamicWinForms {
 
             int xStartPos = 50;
             int yStartPos = 25;
-            TxtBoxAndLabel^ txtlabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos,this,data.countFilesTooltip,data.countFiles,"File count");
+            int xMargin = 75;
+            TxtBoxAndLabel^ Counttxtlabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos,this,data.countFilesTooltip,data.countFiles,"File count");
+            TxtBoxAndLabel^ Daystxtlabel = gcnew TxtBoxAndLabel(xStartPos+xMargin, yStartPos,this,data.daysToStoreTooltip,data.daysToStore,"Days to store");
         }
     private:
         void OnBtnSelectFolderClick(Object^ sender, EventArgs^ e) {
