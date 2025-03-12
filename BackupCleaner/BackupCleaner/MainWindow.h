@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "FolderContainer.h"
 
 namespace BackupCleaner {
@@ -41,11 +41,38 @@ namespace BackupCleaner {
 	private: System::ComponentModel::IContainer^ components;
 
 	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
+		System::Collections::Generic::List<FolderContainer^>^ containers;
+		Panel^ flowPanel;
 
+	public:
+		// Method to add a new container
+		void AddContainer(FolderData& fd,System::String^ key) {
+			FolderContainer^ container = gcnew FolderContainer(this, key, fd);
+			containers->Add(container);
+			flowPanel->Controls->Add(container);
+			UpdateLayout();
+		}
 
+		// Method to remove a container
+		void RemoveContainer(FolderContainer^ container) {
+			if (containers->Contains(container)) {
+				//------
+				//System::String^ key = gcnew System::String(container->GetKey());
+				//------
+				containers->Remove(container);
+				flowPanel->Controls->Remove(container);
+				delete container;  // Calls destructor
+				UpdateLayout();
+			}
+		}
+	private:
+		void UpdateLayout() {
+			int yPos = 10;
+			for each (FolderContainer ^ c in containers) {
+				c->Location = System::Drawing::Point(10, yPos);
+				yPos += c->Height + 10;
+			}
+		}
 #pragma region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
@@ -53,18 +80,16 @@ namespace BackupCleaner {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			containers = gcnew System::Collections::Generic::List<FolderContainer^>();
 			this->SuspendLayout();
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1200, 600);
 			this->ResumeLayout(false);
 			
-			// Создаём FlowLayoutPanel
-			FlowLayoutPanel^ flowPanel = gcnew FlowLayoutPanel();
+			// РЎРѕР·РґР°С‘Рј FlowLayoutPanel
+			flowPanel = gcnew Panel();
 			flowPanel->Dock = DockStyle::Fill;
-			//flowPanel->AutoScroll = true;  // Включаем прокрутку
-			flowPanel->FlowDirection = FlowDirection::TopDown;  // Элементы вниз
-			flowPanel->WrapContents = false;  // Не переносить элементы
 			this->Controls->Add(flowPanel);
 
 			//----- FOLDER CONTAINER
@@ -74,13 +99,13 @@ namespace BackupCleaner {
 
 			StoreData Folders;
 			FolderData fd(1, "days", 2, "size", 3, "count");
-			Folders.addFolder("c:\temp", fd);            
+			Folders.addFolder("c:\\temp\\1", fd);            
+			Folders.addFolder("c:\temp2", fd);            
 			auto data = Folders.GetData();
-			for (const auto& folder : data)
+			for (auto& folder : data)
 			{
-				System::String^ str = System::Convert::ToString(folder.first.c_str());
-				DynamicWinForms::FolderContainer^ container = gcnew DynamicWinForms::FolderContainer(str,folder.second,yOffset + yMargin);
-				flowPanel->Controls->Add(container);
+				System::String^ str = gcnew String(folder.first.c_str());
+				AddContainer(folder.second, str);
 			}
 		}
 #pragma endregion
