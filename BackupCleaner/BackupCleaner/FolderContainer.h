@@ -5,6 +5,7 @@
 #include "TxtBoxAndLabel.h"
 
 namespace BackupCleaner {
+    ref class MainWindow;
     using namespace System;
     using namespace System::Windows::Forms;
     using namespace System::Drawing;
@@ -17,16 +18,14 @@ namespace BackupCleaner {
         Button^ BtnSelectFolder;
         TextBox^ FolderPath;
         String^ key;
-        //MainWindow^ parentWindow;  
+    public:
+        MainWindow^ parentWindow;
 
     public:
-        FolderContainer() {}
-
-        FolderContainer(System::String^ folder, FolderData data) {
-            //parentWindow = parent;
+        FolderContainer(MainWindow^ parent,System::String^ folder, FolderData data) {
+            parentWindow = parent;
             this->Size = System::Drawing::Size(500, 70);
             this->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-
             // Delete button
             BtnDeleteFolder = gcnew Button();
             BtnDeleteFolder->Size = System::Drawing::Size(50, 50);
@@ -50,6 +49,12 @@ namespace BackupCleaner {
             BtnSelectFolder->Text = "Choose folder";
             BtnSelectFolder->Click += gcnew EventHandler(this, &FolderContainer::OnBtnSelectFolderClick);
             this->Controls->Add(BtnSelectFolder);
+
+            int xStartPos = 60;
+            int yStartPos = 20;
+            int xMargins=20;
+            //txtlabel
+            TxtBoxAndLabel^ daysTxtLabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos, this, data.daysToStoreTooltip, data.daysToStore, "days");
         }
 
     private:
@@ -61,9 +66,7 @@ namespace BackupCleaner {
         }
 
         void OnBtnDeleteDataClick(Object^ sender, EventArgs^ e) {
-            /*if (parentWindow != nullptr) {
-                parentWindow->RemoveContainer(this);
-            }*/
+           //parentWindow->RemoveContainer(this);
         }
 
     public:
