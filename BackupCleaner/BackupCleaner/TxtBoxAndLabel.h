@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace DynamicWinForms {
+namespace BackupCleaner {
 
 using namespace System;
 using namespace System::ComponentModel;
