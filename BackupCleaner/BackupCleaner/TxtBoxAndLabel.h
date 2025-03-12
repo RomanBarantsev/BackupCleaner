@@ -2,7 +2,7 @@
 #include <string>
 
 namespace BackupCleaner {
-
+ref class FolderContainer;
 using namespace System;
 using namespace System::ComponentModel;
 using namespace System::Collections;
@@ -20,14 +20,14 @@ using namespace System::Drawing;
         TextBox^ txtbox;
         ToolTip^ tTip;
         int& storeValue;
+        FolderContainer^ parentPanel;
     public:
         TxtBoxAndLabel(int xPosition, int yPosition, Panel^ panel, std::string tooltip, int& txtBox, std::string label) :
             storeValue(txtBox) {
             InitializeComponent(xPosition, yPosition, panel, tooltip, txtBox, label);
         }
     private:
-        void InitializeComponent(int xPos, int yPos, Panel^ panel, std::string& tooltip, int& txtBox, std::string& label) {
-
+        void InitializeComponent(int xPos, int yPos, Panel^ panel, std::string& tooltip, int& txtBox, std::string& label) {            
             //lbl
             lbl = gcnew Label();
             lbl->Size = System::Drawing::Size(xSize, ySize);
