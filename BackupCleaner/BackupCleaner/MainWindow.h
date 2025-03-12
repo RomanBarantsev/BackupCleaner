@@ -1,15 +1,15 @@
 ﻿#pragma once
+#include "StoreData.h"
+#include "FolderData.h"
 #include "FolderContainer.h"
 
 namespace BackupCleaner {
-
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-
 	/// <summary>
 	/// Summary for MainWindow
 	/// </summary>
@@ -35,6 +35,7 @@ namespace BackupCleaner {
 			{
 				delete components;
 			}
+			delete Folders;
 		}
 	protected:
 
@@ -43,11 +44,11 @@ namespace BackupCleaner {
 	private:
 		System::Collections::Generic::List<FolderContainer^>^ containers;
 		Panel^ flowPanel;
-
+		StoreData* Folders;
 	public:
 		// Method to add a new container
 		void AddContainer(FolderData& fd,System::String^ key) {
-			FolderContainer^ container = gcnew FolderContainer(key, fd);
+			FolderContainer^ container = gcnew FolderContainer(this,key, fd);
 			containers->Add(container);
 			flowPanel->Controls->Add(container);
 			UpdateLayout();
@@ -97,11 +98,12 @@ namespace BackupCleaner {
 			int yOffset = 25; // Initial Y position
 			int yMargin = 75;
 
-			StoreData Folders;
+			
+			Folders = new StoreData;
 			FolderData fd(1, "days", 2, "size", 3, "count");
-			Folders.addFolder("c:\\temp\\1", fd);            
-			Folders.addFolder("c:\temp2", fd);            
-			auto data = Folders.GetData();
+			Folders->addFolder("c:\\temp\\1", fd);            
+			Folders->addFolder("c:\temp2", fd);            
+			auto data = Folders->GetData();
 			for (auto& folder : data)
 			{
 				System::String^ str = gcnew String(folder.first.c_str());
