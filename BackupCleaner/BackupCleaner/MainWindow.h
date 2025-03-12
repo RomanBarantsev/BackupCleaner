@@ -47,7 +47,7 @@ namespace BackupCleaner {
 	public:
 		// Method to add a new container
 		void AddContainer(FolderData& fd,System::String^ key) {
-			FolderContainer^ container = gcnew FolderContainer(this, key, fd);
+			FolderContainer^ container = gcnew FolderContainer(key, fd);
 			containers->Add(container);
 			flowPanel->Controls->Add(container);
 			UpdateLayout();
