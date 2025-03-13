@@ -24,7 +24,7 @@
 	//saveToFile("StoreData.dat");
 }
 
-const std::unordered_map<std::string, FolderData> StoreData::GetData()
+const std::unordered_map<std::string, FolderData&> StoreData::GetData()
 {
     return Folders;
 }
@@ -36,7 +36,7 @@ bool StoreData::deleteFolder(std::string Folder)
     return false;
 }
 
-void StoreData::addFolder(std::string path,FolderData folder)
+void StoreData::addFolder(std::string path,FolderData& folder)
 {
     Folders.emplace(path,folder);
 }
