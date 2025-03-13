@@ -53,8 +53,9 @@ namespace BackupCleaner {
             int xStartPos = 60;
             int yStartPos = 20;
             int xMargins=20;
+            System::String^ daysTooltip = "days for which files will be stored";
             //txtlabel
-            TxtBoxAndLabel^ daysTxtLabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos, this, data.daysToStoreTooltip, data.daysToStore, "days");
+            TxtBoxAndLabel^ daysTxtLabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos, this, daysTooltip, data.daysToStore, "days");
         }
 
     private:
