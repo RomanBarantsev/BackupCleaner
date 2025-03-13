@@ -41,3 +41,11 @@ void StoreData::addFolder(std::string path,FolderData folder)
     Folders.emplace(path,folder);
 }
 
+bool StoreData::findByKey(std::string key)
+{
+    if (Folders.find(key)!=Folders.end()) {
+        return true;
+    }
+    return false;
+}
+

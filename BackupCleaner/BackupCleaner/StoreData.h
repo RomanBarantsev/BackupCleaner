@@ -16,5 +16,6 @@ private:
 		const std::unordered_map<std::string,FolderData> GetData();
 		bool deleteFolder(std::string Folder);
 		void addFolder(std::string path, FolderData folder);
+		bool findByKey(std::string key);
 };
 
