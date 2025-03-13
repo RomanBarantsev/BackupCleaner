@@ -54,6 +54,7 @@ namespace BackupCleaner {
 		Button^ BtnAddFolder;
 		System::String^ tmpPath;
 	public:
+		
 		// Method to add a new container
 		void AddContainer(FolderData& fd,System::String^ key) {
 			msclr::interop::marshal_context context;
@@ -63,12 +64,19 @@ namespace BackupCleaner {
 			else
 				Folders->addFolder(nativeStr, fd);
 			//---------------
-			FolderContainer^ container = gcnew FolderContainer(this,key, fd);
+			FolderContainer^ container = gcnew FolderContainer(key, fd);
+			container->OnDeleteContainer += gcnew FolderContainer::DeleteContainerHandler(this, &MainWindow::RemoveContainer);
+			container->OnChangeContainerKeyContainer += gcnew FolderContainer::ChangeContainerKeyHandler(this, &MainWindow::ChangeContainerKey);
 			containers->Add(container);
 			flowPanel->Controls->Add(container);
 			UpdateLayout();
 		}
+		void ChangeContainerKey(FolderContainer^ container) {
+			if (container->GetKey() != container->GetKeyFromBox()) {
+				//container.getData
+			}
 
+		}
 		// Method to remove a container
 		void RemoveContainer(FolderContainer^ container) {
 			auto sysStr = container->GetKey();
@@ -104,34 +112,36 @@ namespace BackupCleaner {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1200, 600);
 			this->ResumeLayout(false);
-			// --- New btnPanel 
-			pathPanel = gcnew Panel();
-			pathPanel->Size = System::Drawing::Size(500, 70);
-			pathPanel->Dock = DockStyle::Top;
-			this->Controls->Add(pathPanel);
-			//-----  folderPath txt box
-			folderPath = gcnew TextBox();
-			folderPath->Size = System::Drawing::Size(150, 50);
-			folderPath->Location = Point(0, 0);
-			folderPath->Text = "";
-			folderPath->ReadOnly = true;
-			pathPanel->Controls->Add(folderPath);			
-			// --- Open folder dialog button
-			BtnNewFolder = gcnew Button();
-			BtnNewFolder->Size = System::Drawing::Size(100, 20);
-			BtnNewFolder->Location = Point(160, 0);
-			BtnNewFolder->Text = "New Folder";
-			BtnNewFolder->Click += gcnew EventHandler(this, &MainWindow::OnBtnNewDataClick);
-			pathPanel->Controls->Add(BtnNewFolder);
-			// --- Add folder button
-			BtnAddFolder = gcnew Button();
-			BtnAddFolder->Size = System::Drawing::Size(50, 20);
-			BtnAddFolder->Location = Point(270, 0);
-			BtnAddFolder->Text = "Add";
-			BtnAddFolder->Click += gcnew EventHandler(this, &MainWindow::OnBtnAddClick);
-			pathPanel->Controls->Add(BtnAddFolder);
-
-			// Создаём FlowLayoutPanel
+			// NEW FOLDER PANEL
+			{
+				// --- New btnPanel 
+				pathPanel = gcnew Panel();
+				pathPanel->Size = System::Drawing::Size(500, 70);
+				pathPanel->Dock = DockStyle::Top;
+				this->Controls->Add(pathPanel);
+				//-----  folderPath txt box
+				folderPath = gcnew TextBox();
+				folderPath->Size = System::Drawing::Size(150, 50);
+				folderPath->Location = Point(0, 0);
+				folderPath->Text = "";
+				folderPath->ReadOnly = true;
+				pathPanel->Controls->Add(folderPath);
+				// --- Open folder dialog button
+				BtnNewFolder = gcnew Button();
+				BtnNewFolder->Size = System::Drawing::Size(100, 20);
+				BtnNewFolder->Location = Point(160, 0);
+				BtnNewFolder->Text = "New Folder";
+				BtnNewFolder->Click += gcnew EventHandler(this, &MainWindow::OnBtnNewDataClick);
+				pathPanel->Controls->Add(BtnNewFolder);
+				// --- Add folder button
+				BtnAddFolder = gcnew Button();
+				BtnAddFolder->Size = System::Drawing::Size(50, 20);
+				BtnAddFolder->Location = Point(270, 0);
+				BtnAddFolder->Text = "Add";
+				BtnAddFolder->Click += gcnew EventHandler(this, &MainWindow::OnBtnAddClick);
+				pathPanel->Controls->Add(BtnAddFolder);
+			}
+			// --- Add FlowLayoutPanel
 			flowPanel = gcnew Panel();
 			flowPanel->Size = System::Drawing::Size(1200, this->ClientSize.Height - pathPanel->Height);  // ✅ Adjust height dynamically
 			flowPanel->Location = System::Drawing::Point(0, pathPanel->Height);  // ✅ Place below pathPanel
@@ -162,8 +172,8 @@ namespace BackupCleaner {
 			void OnBtnAddClick(Object^ sender, EventArgs^ e) {
 				FolderBrowserDialog^ folderDialog = gcnew FolderBrowserDialog();
 				if (tmpPath!="") {
-					FolderData fd(0,0,0);
-					AddContainer(fd,tmpPath);
+					std::shared_ptr<FolderData> fd = std::make_shared<FolderData>(0, 0, 0);
+					AddContainer(*fd,tmpPath);
 				}
 				
 			}

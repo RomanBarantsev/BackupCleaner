@@ -18,12 +18,16 @@ namespace BackupCleaner {
         Button^ BtnSelectFolder;
         TextBox^ FolderPath;
         String^ key;
+        FolderData* data;
     public:
-        MainWindow^ parentWindow;
+        delegate void DeleteContainerHandler(FolderContainer^ sender); 
+        event DeleteContainerHandler^ OnDeleteContainer;
+        delegate void ChangeContainerKeyHandler(FolderContainer^ sender);
+        event ChangeContainerKeyHandler^ OnChangeContainerKeyContainer;  
 
     public:
-        FolderContainer(MainWindow^ parent,System::String^ folder, FolderData data) {
-            parentWindow = parent;
+        FolderContainer(System::String^ folder, FolderData& fdata) {
+            data = &fdata;
             this->Size = System::Drawing::Size(500, 70);
             this->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
             // Delete button
@@ -64,14 +68,18 @@ namespace BackupCleaner {
             if (folderDialog->ShowDialog() == DialogResult::OK) {
                 FolderPath->Text = folderDialog->SelectedPath;
             }
+            OnChangeContainerKeyContainer(this);
         }
 
         void OnBtnDeleteDataClick(Object^ sender, EventArgs^ e) {
-           //parentWindow->RemoveContainer(this);
+            OnDeleteContainer(this);
         }
 
     public:
         System::String^ GetKey() {
+            return FolderPath->Text;
+        }
+        System::String^ GetKeyFromBox() {
             return FolderPath->Text;
         }
     };
