@@ -22,17 +22,17 @@ using namespace System::Drawing;
         int& storeValue;
         FolderContainer^ parentPanel;
     public:
-        TxtBoxAndLabel(int xPosition, int yPosition, Panel^ panel, std::string tooltip, int& txtBox, std::string label) :
+        TxtBoxAndLabel(int xPosition, int yPosition, Panel^ panel, System::String^ tooltip, int& txtBox, std::string label) :
             storeValue(txtBox) {
             InitializeComponent(xPosition, yPosition, panel, tooltip, txtBox, label);
         }
     private:
-        void InitializeComponent(int xPos, int yPos, Panel^ panel, std::string& tooltip, int& txtBox, std::string& label) {            
+        void InitializeComponent(int xPos, int yPos, Panel^ panel, System::String^ tooltip, int& txtBox, std::string& label) {
             //lbl
             lbl = gcnew Label();
             lbl->Size = System::Drawing::Size(xSize, ySize);
             lbl->Location = Point(xPos, yPos);
-            System::String^ sysStr = gcnew System::String(tooltip.c_str());
+            System::String^ sysStr = tooltip;
             lbl->Text = sysStr;
 
             //File Size Text
@@ -44,7 +44,7 @@ using namespace System::Drawing;
             txtbox->Leave += gcnew EventHandler(this, &TxtBoxAndLabel::OnTextBoxLeave);
             //ToolTip
             tTip = gcnew ToolTip();
-            str = System::Convert::ToString(tooltip.c_str());
+            str = tooltip;
             tTip->SetToolTip(lbl, str);
             panel->Controls->Add(txtbox);
             panel->Controls->Add(lbl);
