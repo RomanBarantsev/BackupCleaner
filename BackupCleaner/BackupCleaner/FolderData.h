@@ -5,11 +5,21 @@
 struct FolderData
 {
 public:
-	int daysToStore;
-	int folderSize;
-	int countFiles;
-	FolderData(int Days, int Size, int count) :
-		daysToStore(Days), folderSize(Size), countFiles(count) {
+	int* daysToStore;
+	int* folderSize;
+	int* countFiles;
+	FolderData(int Days, int Size, int count) {
+		int* daysToStore = new int(Days);
+		int* folderSize = new int(Size);
+		int* countFiles = new int(count);
+	}
+	~FolderData() {
+		delete daysToStore;
+		delete folderSize;
+		delete countFiles;
+		daysToStore = nullptr;
+		folderSize = nullptr;
+		countFiles = nullptr;
 	}
 };
 
