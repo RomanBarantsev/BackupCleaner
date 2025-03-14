@@ -53,10 +53,11 @@ namespace BackupCleaner {
 		Button^ BtnNewFolder;
 		Button^ BtnAddFolder;
 		System::String^ tmpPath;
+		FolderData* NewFolderData;
 	public:
 		
 		// Method to add a new container
-		void AddContainer(FolderData& fd,System::String^ key) {
+		void AddContainer(FolderData* fd,System::String^ key) {
 			msclr::interop::marshal_context context;
 			std::string nativeStr = context.marshal_as<std::string>(key);
 			if (Folders->findByKey(nativeStr))
@@ -73,16 +74,15 @@ namespace BackupCleaner {
 		}
 		void ChangeContainerKey(FolderContainer^ container) {
 			if (container->GetKey() != container->GetKeyFromBox()) {
-				//container.getData
+				FolderData* fd = container->GetData();
+				Folders->deleteFolder(StrSystemToNative(container->GetKey()));
+				Folders->addFolder(StrSystemToNative(container->GetKeyFromBox()), fd);
 			}
 
 		}
 		// Method to remove a container
-		void RemoveContainer(FolderContainer^ container) {
-			auto sysStr = container->GetKey();
-			msclr::interop::marshal_context context;
-			std::string nativeStr = context.marshal_as<std::string>(sysStr);
-			Folders->deleteFolder(nativeStr);
+		void RemoveContainer(FolderContainer^ container) {			
+			Folders->deleteFolder(StrSystemToNative(container->GetKey()));
 			//--------------
 			if (containers->Contains(container)) {
 				containers->Remove(container);
@@ -92,6 +92,13 @@ namespace BackupCleaner {
 			}
 		}
 	private:
+		std::string StrSystemToNative(System::String^ str) {
+			msclr::interop::marshal_context context;
+			return context.marshal_as<std::string>(str);
+		}
+		System::String^ StrNativeToSystem(std::string nativeStr) {
+			return gcnew System::String(nativeStr.c_str());
+		}
 		void UpdateLayout() {
 			int yPos = 10;
 			for each (FolderContainer ^ c in containers) {
@@ -172,8 +179,9 @@ namespace BackupCleaner {
 			void OnBtnAddClick(Object^ sender, EventArgs^ e) {
 				FolderBrowserDialog^ folderDialog = gcnew FolderBrowserDialog();
 				if (tmpPath!="") {
-					std::shared_ptr<FolderData> fd = std::make_shared<FolderData>(0, 0, 0);
-					AddContainer(*fd,tmpPath);
+					
+					NewFolderData = new FolderData(0,0,0);
+					AddContainer(NewFolderData,tmpPath);
 				}
 				
 			}
