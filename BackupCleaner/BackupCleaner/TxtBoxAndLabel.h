@@ -54,11 +54,11 @@ using namespace System::Drawing;
             int newValue;
             if (Int32::TryParse(txtbox->Text, newValue)) {
                 storeValue = newValue;  // Записываем значение
-                MessageBox::Show("Новое значение: " + storeValue);
+                MessageBox::Show("Новое значение: " + newValue);
             }
             else {
                 MessageBox::Show("Ошибка! Введите число.");
-                txtbox->Text = storeValue.ToString();  // Восстанавливаем старое значение
+                txtbox->Text = newValue.ToString();  // Восстанавливаем старое значение
             }
         }
     };
