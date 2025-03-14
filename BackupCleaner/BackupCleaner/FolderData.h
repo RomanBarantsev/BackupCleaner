@@ -9,9 +9,9 @@ public:
 	int* folderSize;
 	int* countFiles;
 	FolderData(int Days, int Size, int count) {
-		int* daysToStore = new int(Days);
-		int* folderSize = new int(Size);
-		int* countFiles = new int(count);
+		daysToStore = new int(Days);
+		folderSize = new int(Size);
+		countFiles = new int(count);
 	}
 	~FolderData() {
 		delete daysToStore;
