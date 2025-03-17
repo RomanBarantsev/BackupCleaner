@@ -55,22 +55,22 @@ namespace BackupCleaner {
 		System::String^ tmpPath;
 		FolderData* NewFolderData;
 	public:
-		
-		// Method to add a new container
-		void AddContainer(FolderData* fd,System::String^ key) {
-			msclr::interop::marshal_context context;
-			std::string nativeStr = context.marshal_as<std::string>(key);
-			if (Folders->findByKey(nativeStr))
-				return;
-			else
-				Folders->addFolder(nativeStr, fd);
-			//---------------
+		void AddContainerToUI(FolderData*& fd, System::String^ key) {
 			FolderContainer^ container = gcnew FolderContainer(key, fd);
 			container->OnDeleteContainer += gcnew FolderContainer::DeleteContainerHandler(this, &MainWindow::RemoveContainer);
 			container->OnChangeContainerKeyContainer += gcnew FolderContainer::ChangeContainerKeyHandler(this, &MainWindow::ChangeContainerKey);
 			containers->Add(container);
 			flowPanel->Controls->Add(container);
 			UpdateLayout();
+		}
+		// Method to add a new container
+		void AddContainerToData(FolderData*& fd,System::String^ key) {
+			msclr::interop::marshal_context context;
+			std::string nativeStr = context.marshal_as<std::string>(key);
+			if (Folders->findByKey(nativeStr))
+				return;
+			else
+				Folders->addFolder(nativeStr, fd);			
 		}
 		void ChangeContainerKey(FolderContainer^ container) {
 			if (container->GetKey() != container->GetKeyFromBox()) {
@@ -165,7 +165,7 @@ namespace BackupCleaner {
 			for (auto& folder : data)
 			{
 				System::String^ str = gcnew String(folder.first.c_str());
-				AddContainer(folder.second, str);
+				AddContainerToUI(folder.second, str);
 			}
 		}
 		private:
@@ -180,8 +180,10 @@ namespace BackupCleaner {
 				FolderBrowserDialog^ folderDialog = gcnew FolderBrowserDialog();
 				if (tmpPath!="") {
 					
-					NewFolderData = new FolderData(0,0,0);
-					AddContainer(NewFolderData,tmpPath);
+					FolderData* data;
+					data = nullptr;
+					AddContainerToData(data, tmpPath);
+					AddContainerToUI(data,tmpPath);
 				}
 				
 			}
