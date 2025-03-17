@@ -1,27 +1,60 @@
 #include "StoreData.h"
 
- void StoreData::saveToFile(const std::string& filename) {
+void StoreData::saveToFile(const std::string& filename) {
     std::ofstream file(filename, std::ios::binary);
-    if (file.is_open()) {
-        file.write((char*)this, sizeof(FolderData));
-        file.close();
+    if (!file.is_open()) {
+        return;
     }
+
+    size_t size = Folders.size();
+    file.write((char*)&size, sizeof(size_t));  // Записываем количество папок
+
+    for (const auto& pair : Folders) {
+        size_t pathSize = pair.first.size();
+        file.write((char*)&pathSize, sizeof(size_t));  // Длина пути
+        file.write(pair.first.c_str(), pathSize);      // Сам путь
+
+        file.write((char*)&pair.second->daysToStore, sizeof(int));
+        file.write((char*)&pair.second->folderSize, sizeof(int));
+        file.write((char*)&pair.second->countFiles, sizeof(int));
+    }
+
+    file.close();
 }
 
- void StoreData::loadFromFile(const std::string& filename) {
+void StoreData::loadFromFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::binary);
-    if (file.is_open()) {
-        file.read((char*)this, sizeof(FolderData));
-        file.close();
+    if (!file.is_open()) {
+        return;
     }
+
+    size_t size;
+    file.read((char*)&size, sizeof(size_t));  // Читаем количество папок
+
+    for (size_t i = 0; i < size; i++) {
+        size_t pathSize;
+        file.read((char*)&pathSize, sizeof(size_t));  // Читаем длину пути
+
+        std::string path(pathSize, '\0');
+        file.read(&path[0], pathSize);  // Читаем сам путь
+
+        int daysToStore, folderSize, countFiles;
+        file.read((char*)&daysToStore, sizeof(int));
+        file.read((char*)&folderSize, sizeof(int));
+        file.read((char*)&countFiles, sizeof(int));
+
+        Folders[path] = new FolderData(daysToStore, folderSize, countFiles);
+    }
+
+    file.close();
 }
 
  StoreData::StoreData() {
-	//loadFromFile("StoreData.dat");
+	loadFromFile("StoreData.dat");
 }
 
  StoreData::~StoreData() {
-     //saveToFile("StoreData.dat");
+    //saveToFile("StoreData.dat");
      for (auto& folder : Folders)
      {
          delete folder.second;
