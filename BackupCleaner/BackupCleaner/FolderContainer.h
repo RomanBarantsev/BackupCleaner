@@ -26,7 +26,7 @@ namespace BackupCleaner {
         event ChangeContainerKeyHandler^ OnChangeContainerKeyContainer;  
 
     public:
-        FolderContainer(System::String^ folder, FolderData* fdata) {
+        FolderContainer(System::String^ folder,FolderData* fdata) {
             data = fdata;
             this->Size = System::Drawing::Size(500, 70);
             this->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
@@ -60,7 +60,7 @@ namespace BackupCleaner {
             int xMargins=20;
             System::String^ daysTooltip = "days for which files will be stored";
             //txtlabel
-            TxtBoxAndLabel^ daysTxtLabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos, this, daysTooltip, *data->daysToStore, "days");
+            TxtBoxAndLabel^ daysTxtLabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos, this, daysTooltip, data->daysToStore, "days");
         }
 
     private:
@@ -70,6 +70,7 @@ namespace BackupCleaner {
                 FolderPath->Text = folderDialog->SelectedPath;
             }
             OnChangeContainerKeyContainer(this);
+            key = FolderPath->Text;
         }
 
         void OnBtnDeleteDataClick(Object^ sender, EventArgs^ e) {
