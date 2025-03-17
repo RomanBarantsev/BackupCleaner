@@ -21,10 +21,15 @@
 }
 
  StoreData::~StoreData() {
-	saveToFile("StoreData.dat");
+     //saveToFile("StoreData.dat");
+     for (auto& folder : Folders)
+     {
+         delete folder.second;
+         folder.second = nullptr;
+     }
 }
 
-const std::unordered_map<std::string, FolderData&> StoreData::GetData()
+const std::unordered_map<std::string, FolderData*> StoreData::GetData()
 {
     return Folders;
 }
@@ -36,8 +41,10 @@ bool StoreData::deleteFolder(std::string Folder)
     return false;
 }
 
-void StoreData::addFolder(std::string path,FolderData& folder)
+void StoreData::addFolder(std::string path, FolderData*& folder)
 {
+    if(folder == nullptr)
+        folder = new FolderData(0, 0, 0);
     Folders.emplace(path,folder);
 }
 
