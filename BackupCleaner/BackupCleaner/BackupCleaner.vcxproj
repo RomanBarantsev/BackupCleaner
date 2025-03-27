@@ -121,12 +121,13 @@
   <ItemGroup>
     <ClInclude Include="Cleaner.h" />
     <ClInclude Include="FolderData.h" />
-    <ClInclude Include="Main.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="StoreData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cleaner.cpp" />
     <ClCompile Include="FolderData.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="StoreData.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

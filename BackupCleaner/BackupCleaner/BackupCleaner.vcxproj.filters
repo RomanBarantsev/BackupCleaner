@@ -24,8 +24,8 @@
     <ClInclude Include="StoreData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Main.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="main.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +36,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StoreData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
