@@ -3,6 +3,7 @@
 void Cleaner::cleanByFolderSize()
 {
 	uintmax_t totalSize = 0;
+	//get all files by date then iterate, and counting and if it more then delete last ones. 
 	sizeOFolder = sizeOFolder * 1024 * 1024;
 	for (const auto& entry : fs::directory_iterator(folderPath)) {		
 		if (fs::is_regular_file(entry)) {
