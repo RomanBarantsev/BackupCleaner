@@ -1,30 +1,60 @@
 #include "Cleaner.h"
+#include <chrono>
+
+namespace fs = std::filesystem;
 
 void Cleaner::cleanByFolderSize()
 {
 	uintmax_t totalSize = 0;
 	//get all files by date then iterate, and counting and if it more then delete last ones. 
 	sizeOFolder = sizeOFolder * 1024 * 1024;
-	for (const auto& entry : files) {
-		if (fs::is_regular_file(entry)) {
-			totalSize += fs::file_size(entry);
+	for (const auto& file : files) {
+		if (fs::is_regular_file(file)) {
+			totalSize += fs::file_size(file);
 			if (totalSize > sizeOFolder)
 			{
-				totalSize -= fs::file_size(entry);
-				fs::remove(entry);
+				totalSize -= fs::file_size(file);
+				fs::remove(file);
 			}
 		}
 	}
 }
 
-void Cleaner::cleanBySize(std::vector<fs::directory_entry>& files)
+void Cleaner::cleanByCount()
 {
-
+	int counter{0};
+	for (const auto& file : files) {
+		
+		if (counter >= countFiles) {
+			fs::remove(file);
+		}
+		else {
+			counter++;
+		}
+	}
 }
+
 
 void Cleaner::cleanByAge()
 {
-
+	auto now = std::chrono::system_clock::now();
+	time_t t = std::chrono::system_clock::to_time_t(now);
+	tm* localTime = std::localtime(&t);
+	localTime->tm_hour = 0;
+	localTime->tm_min = 0;
+	localTime->tm_sec = 0;
+	auto midnightToday = std::chrono::system_clock::from_time_t(std::mktime(localTime));
+	auto cutoffTime = midnightToday - std::chrono::hours(24 * daysToStore);
+	for (const auto& file : files) {
+		if (fs::is_regular_file(file)) {
+			auto ftime = fs::last_write_time(file);
+			auto sysTime = clock_cast<std::chrono::system_clock>(ftime);
+			if (sysTime < cutoffTime)
+			{
+				fs::remove(file);
+			}
+		}
+	}
 }
 
 void Cleaner::getSortedFilesByTime()
@@ -56,10 +86,10 @@ Cleaner::~Cleaner()
 void Cleaner::clean()
 {	
 	if (daysToStore!=0) {
-
+		cleanByAge();
 	}
 	if (countFiles != 0) {
-
+		cleanByCount();
 	}
 	if (sizeOFolder != 0) {
 		cleanByFolderSize();

@@ -16,7 +16,7 @@ private:
 	std::vector<fs::directory_entry> files;
 	std::vector<FolderData> Folders;
 	void cleanByFolderSize();
-	void cleanBySize(std::vector<fs::directory_entry>& files);
+	void cleanByCount();
 	void cleanByAge();
 	void getSortedFilesByTime();
 public:
