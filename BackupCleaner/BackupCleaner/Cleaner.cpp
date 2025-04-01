@@ -23,8 +23,7 @@ void Cleaner::cleanByFolderSize()
 void Cleaner::cleanByCount()
 {
 	int counter{0};
-	for (const auto& file : files) {
-		
+	for (const auto& file : files) {		
 		if (counter >= countFiles) {
 			fs::remove(file);
 		}
@@ -73,6 +72,15 @@ Cleaner::Cleaner(std::string path, int days, int count, int size) : folderPath(p
 {
 	if (folderPath == "")
 		return;
+	if (protection) {
+		for (auto& folder : forbiddenFolders)
+		{
+			int start = path.find(folder);		
+			if (start == 0) {
+				throw(std::invalid_argument("wrong directory"));
+			}			
+		}
+	}	
 	getSortedFilesByTime();
 	clean();
 }
