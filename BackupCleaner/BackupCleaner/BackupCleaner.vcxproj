@@ -79,6 +79,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
@@ -125,9 +126,12 @@
     <ClInclude Include="FolderData.h" />
     <ClInclude Include="StoreData.h" />
     <ClInclude Include="TxtBoxAndLabel.h" />
+    <ClInclude Include="TaskManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cleaner.cpp" />
+    <ClCompile Include="FolderData.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="StoreData.cpp" />
     <ClInclude Include="FolderContainer.h" />
     <ClInclude Include="MainWindow.h">

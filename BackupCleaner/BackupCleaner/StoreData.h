@@ -6,7 +6,6 @@
 class StoreData
 {
 private:
-	std::string fileName = "StoreData.dat";
 	std::unordered_map<std::string,FolderData*> Folders;
     void saveToFile(const std::string& filename);
     void loadFromFile(const std::string& filename);

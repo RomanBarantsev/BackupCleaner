@@ -51,29 +51,11 @@ void StoreData::loadFromFile(const std::string& filename) {
 }
 
  StoreData::StoreData() {
-     try {
-         loadFromFile(fileName);
-     }
-     catch (std::exception) {
-         namespace fs = std::filesystem;
-         fs::path filePath = fs::current_path() / fileName;
-         if(fs::exists(filePath)) {
-             fs::remove(filePath);
-         }         
-    }
+	loadFromFile("StoreData.dat");
 }
 
  StoreData::~StoreData() {
-     try {
-         saveToFile(fileName);
-     }
-     catch (std::exception) {
-         namespace fs = std::filesystem;
-         fs::path filePath = fs::current_path() / fileName;
-         if (fs::exists(filePath)) {
-             fs::remove(filePath);
-         }
-     }    
+    //saveToFile("StoreData.dat");
      for (auto& folder : Folders)
      {
          delete folder.second;

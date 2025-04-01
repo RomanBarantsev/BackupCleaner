@@ -27,6 +27,11 @@
     <ClInclude Include="StoreData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TaskManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Header Files</Filter>
     <ClInclude Include="FolderData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -44,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
