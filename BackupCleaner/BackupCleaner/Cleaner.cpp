@@ -37,19 +37,18 @@ void Cleaner::cleanByCount()
 
 void Cleaner::cleanByAge()
 {
-	auto now = std::chrono::system_clock::now();
-	time_t t = std::chrono::system_clock::to_time_t(now);
-	tm* localTime = std::localtime(&t);
-	localTime->tm_hour = 0;
-	localTime->tm_min = 0;
-	localTime->tm_sec = 0;
-	auto midnightToday = std::chrono::system_clock::from_time_t(std::mktime(localTime));
-	auto cutoffTime = midnightToday - std::chrono::hours(24 * daysToStore);
+	using namespace std::chrono;
+	using Day = std::chrono::days;
+	using std::chrono::duration_cast;
+	auto start = std::chrono::system_clock::now();
+	auto midnight = std::chrono::floor<Day>(start); 
+	auto midnightToday = time_point_cast<system_clock::duration>(midnight);
+	auto cutoffTime = midnightToday - std::chrono::hours(24 * (daysToStore-1));
 	for (const auto& file : files) {
 		if (fs::is_regular_file(file)) {
 			auto ftime = fs::last_write_time(file);
 			auto sysTime = clock_cast<std::chrono::system_clock>(ftime);
-			if (sysTime < cutoffTime)
+			if (sysTime <= cutoffTime)
 			{
 				fs::remove(file);
 			}
