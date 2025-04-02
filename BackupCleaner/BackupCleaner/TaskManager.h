@@ -121,6 +121,13 @@ std::string CreateScheduledTask() {
         pAction->Release();
         pActionCollection->Release();
 
+        ITaskSettings* pSettings = nullptr;
+        hr = pTask->get_Settings(&pSettings);
+        if (SUCCEEDED(hr)) {
+            // Устанавливаем "немедленный запуск при пропуске"
+            hr = pSettings->put_StartWhenAvailable(VARIANT_TRUE);
+            pSettings->Release();
+        }
         // Сохранение задачи в планировщике
         IRegisteredTask* pRegisteredTask = nullptr;
         hr = pRootFolder->RegisterTaskDefinition(_bstr_t(taskName.c_str()), pTask, TASK_CREATE_OR_UPDATE, _variant_t(L""), _variant_t(L""), TASK_LOGON_INTERACTIVE_TOKEN, _variant_t(L""), &pRegisteredTask);
