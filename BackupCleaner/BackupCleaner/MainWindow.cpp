@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include <Windows.h>
 #include "Cleaner.h"
+#include "TaskManager.h"
 
 using namespace BackupCleaner;
 
