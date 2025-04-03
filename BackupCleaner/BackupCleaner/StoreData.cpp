@@ -31,7 +31,8 @@ void StoreData::loadFromFile(const std::string& filename) {
 
     size_t size;
     file.read((char*)&size, sizeof(size_t));  // Читаем количество папок
-
+    if (size == SIZE_MAX)
+        return;
     for (size_t i = 0; i < size; i++) {
         size_t pathSize;
         file.read((char*)&pathSize, sizeof(size_t));  // Читаем длину пути
