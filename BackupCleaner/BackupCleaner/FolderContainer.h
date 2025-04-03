@@ -57,10 +57,14 @@ namespace BackupCleaner {
 
             int xStartPos = 60;
             int yStartPos = 20;
-            int xMargins=20;
+            int xMargin=100;
             System::String^ daysTooltip = "days for which files will be stored";
+            System::String^ countTooltip = "count of files which will be stored";
+            System::String^ weightTooltip = "folder size which will be stored";
             //txtlabel
             TxtBoxAndLabel^ daysTxtLabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos, this, daysTooltip, data->daysToStore, "days");
+            TxtBoxAndLabel^ countTxtLabel = gcnew TxtBoxAndLabel(xStartPos+=xMargin, yStartPos, this, countTooltip, data->countFiles, "count");
+            TxtBoxAndLabel^ weightTxtLabel = gcnew TxtBoxAndLabel(xStartPos+=xMargin, yStartPos, this, weightTooltip, data->folderSize, "weight");
         }
 
     private:
