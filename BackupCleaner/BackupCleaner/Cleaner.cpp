@@ -77,7 +77,8 @@ Cleaner::Cleaner(std::string path, int days, int count, int size) : folderPath(p
 		{
 			int start = path.find(folder);		
 			if (start == 0) {
-				throw(std::invalid_argument("wrong directory"));
+				//throw(std::invalid_argument("wrong directory"));
+				return;
 			}			
 		}
 	}	
