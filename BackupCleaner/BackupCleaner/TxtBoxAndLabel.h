@@ -55,12 +55,12 @@ using namespace System::Drawing;
             TextBox^ tb = safe_cast<TextBox^>(sender);
             int newValue;
             if (Int32::TryParse(txtbox->Text, newValue)) {
-                storeValue = newValue;  // Записываем значение
-                MessageBox::Show("Новое значение: " + newValue);
+                storeValue = newValue;  
+                //MessageBox::Show("New Value: " + newValue);
             }
             else {
-                MessageBox::Show("Ошибка! Введите число.");
-                txtbox->Text = newValue.ToString();  // Восстанавливаем старое значение
+                //MessageBox::Show("Error! Please type numeric");
+                txtbox->Text = newValue.ToString(); 
             }
         }
     };
