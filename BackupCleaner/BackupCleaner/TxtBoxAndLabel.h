@@ -12,9 +12,11 @@ using namespace System::Drawing;
 
     public ref class TxtBoxAndLabel : public Panel {
     private:
-        static const int spacing{ 20 };
-        static const int xSize{ 50 };
-        static const int ySize{ 25 };
+        static const int spacing{ 50 };
+        static const int TXTxSize{ 50 };
+        static const int TXTySize{ 25 }; 
+        static const int LBLxSize{ 200 };
+        static const int LBLySize{ 25 };
         //--------------------------------
         Label^ lbl;
         TextBox^ txtbox;
@@ -30,15 +32,15 @@ using namespace System::Drawing;
         void InitializeComponent(int xPos, int yPos, Panel^ panel, System::String^ tooltip, int& txtBox, std::string& label) {
             //lbl
             lbl = gcnew Label();
-            lbl->Size = System::Drawing::Size(xSize, ySize);
+            lbl->Size = System::Drawing::Size(LBLxSize, LBLySize);
             lbl->Location = Point(xPos, yPos);
             System::String^ sysStr = tooltip;
             lbl->Text = sysStr;
 
             //File Size Text
             txtbox = gcnew TextBox();
-            txtbox->Size = System::Drawing::Size(xSize, ySize);
-            txtbox->Location = Point(xPos, yPos + spacing);
+            txtbox->Size = System::Drawing::Size(TXTxSize, TXTySize);
+            txtbox->Location = Point(xPos+LBLxSize, yPos);
             System::String^ str = System::Convert::ToString(txtBox);
             txtbox->Text = str;
             txtbox->Leave += gcnew EventHandler(this, &TxtBoxAndLabel::OnTextBoxLeave);
