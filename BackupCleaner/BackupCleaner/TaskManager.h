@@ -22,7 +22,7 @@ std::string CreateScheduledTask() {
             return "Failed to initialize COM library.\n";
         }
 
-        // Создание экземпляра планировщика задач
+        // task manager instance
         ITaskService* pService = nullptr;
         hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pService);
         if (FAILED(hr)) {
@@ -31,7 +31,7 @@ std::string CreateScheduledTask() {
 
         }
 
-        // Подключение к планировщику
+        // connecting to task manager
         hr = pService->Connect(_variant_t(), _variant_t(), _variant_t(), _variant_t());
         if (FAILED(hr)) {
             pService->Release();
@@ -39,7 +39,7 @@ std::string CreateScheduledTask() {
             return "Failed to connect to Task Scheduler.\n";
         }
 
-        // Получаем папку задач
+        // getting root folder
         ITaskFolder* pRootFolder = nullptr;
         hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
         if (FAILED(hr)) {
@@ -48,15 +48,14 @@ std::string CreateScheduledTask() {
             return "Failed to get Task Scheduler root folder.\n";
         }
 
+        // checking for existing task
         IRegisteredTask* existTask = nullptr;
         hr = pRootFolder->GetTask(_bstr_t(taskName.c_str()), &existTask);
         if (SUCCEEDED(hr)) {
-            pRootFolder->Release();
-            pService->Release();
-            return "Already Exist";
+            pRootFolder->DeleteTask(_bstr_t(taskName.c_str()),0);
         }        
 
-        // Создаём новую задачу
+        // creating new task 
         ITaskDefinition* pTask = nullptr;
         hr = pService->NewTask(0, &pTask);
         if (FAILED(hr)) {
@@ -66,13 +65,13 @@ std::string CreateScheduledTask() {
             return  "Failed to create a new task.\n";
         }
 
-        // Устанавливаем общие параметры задачи
+        // common settings
         IRegistrationInfo* pRegInfo = nullptr;
         pTask->get_RegistrationInfo(&pRegInfo);
         pRegInfo->put_Author(_bstr_t(L"User"));
         pRegInfo->Release();
 
-        // Настройка триггера (запуск раз в сутки в 00:00)
+        // trigger setting
         ITriggerCollection* pTriggerCollection = nullptr;
         pTask->get_Triggers(&pTriggerCollection);
         ITrigger* pTrigger = nullptr;
@@ -86,6 +85,7 @@ std::string CreateScheduledTask() {
             return "Failed to create trigger.\n";
         }
 
+        //set time of executing
         IDailyTrigger* pDailyTrigger = nullptr;
         pTrigger->QueryInterface(IID_IDailyTrigger, (void**)&pDailyTrigger);
         pDailyTrigger->put_DaysInterval(1);
@@ -94,7 +94,7 @@ std::string CreateScheduledTask() {
         pTrigger->Release();
         pTriggerCollection->Release();
 
-        // Устанавливаем действие - запуск .exe
+        // action creating - executing .exe file
         IActionCollection* pActionCollection = nullptr;
         pTask->get_Actions(&pActionCollection);
         IAction* pAction = nullptr;
@@ -108,27 +108,29 @@ std::string CreateScheduledTask() {
             return "Failed to create action.\n";
         }
 
+        // set argument and work folder
         IExecAction* pExecAction = nullptr;
-        pAction->QueryInterface(IID_IExecAction, (void**)&pExecAction);
-
-        // Получаем путь к текущему исполняемому файлу
+        pAction->QueryInterface(IID_IExecAction, (void**)&pExecAction);        
         wchar_t exePath[MAX_PATH];
         GetModuleFileNameW(NULL, exePath, MAX_PATH);
         pExecAction->put_Path(_bstr_t(exePath));
         BSTR bs = SysAllocString(L"1");
         pExecAction->put_Arguments(bs);
+        std::wstring workingDir = std::filesystem::path(exePath).parent_path().wstring();
+        pExecAction->put_WorkingDirectory(_bstr_t(workingDir.c_str()));
         pExecAction->Release();
         pAction->Release();
         pActionCollection->Release();
 
+        //set start when available
         ITaskSettings* pSettings = nullptr;
         hr = pTask->get_Settings(&pSettings);
         if (SUCCEEDED(hr)) {
-            // Устанавливаем "немедленный запуск при пропуске"
             hr = pSettings->put_StartWhenAvailable(VARIANT_TRUE);
             pSettings->Release();
         }
-        // Сохранение задачи в планировщике
+
+        // saving task to task manager
         IRegisteredTask* pRegisteredTask = nullptr;
         hr = pRootFolder->RegisterTaskDefinition(_bstr_t(taskName.c_str()), pTask, TASK_CREATE_OR_UPDATE, _variant_t(L""), _variant_t(L""), TASK_LOGON_INTERACTIVE_TOKEN, _variant_t(L""), &pRegisteredTask);
         if (SUCCEEDED(hr)) {
