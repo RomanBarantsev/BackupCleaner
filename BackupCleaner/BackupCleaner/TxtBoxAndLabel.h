@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "MainWindow.h"
 
 namespace BackupCleaner {
 ref class FolderContainer;
@@ -22,11 +23,11 @@ using namespace System::Drawing;
         TextBox^ txtbox;
         ToolTip^ tTip;
         int& storeValue;
-        FolderContainer^ parentPanel;
+        Panel^ parentPanel;
     public:
-        TxtBoxAndLabel(int xPosition, int yPosition, Panel^ panel, System::String^ tooltip, int& txtBox, std::string label) :
-            storeValue(txtBox) {
-            InitializeComponent(xPosition, yPosition, panel, tooltip, txtBox, label);
+        TxtBoxAndLabel(int xPosition, int yPosition, Panel^ parent, System::String^ tooltip, int& value, std::string label) :
+            storeValue(value) {
+            InitializeComponent(xPosition, yPosition, parent, tooltip, value, label);
         }
     private:
         void InitializeComponent(int xPos, int yPos, Panel^ panel, System::String^ tooltip, int& txtBox, std::string& label) {
@@ -44,24 +45,38 @@ using namespace System::Drawing;
             System::String^ str = System::Convert::ToString(txtBox);
             txtbox->Text = str;
             txtbox->Leave += gcnew EventHandler(this, &TxtBoxAndLabel::OnTextBoxLeave);
+            txtbox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &TxtBoxAndLabel::OnKeyDown);
             //ToolTip
             tTip = gcnew ToolTip();
             str = tooltip;
             tTip->SetToolTip(lbl, str);
+            parentPanel = panel;
             panel->Controls->Add(txtbox);
             panel->Controls->Add(lbl);
         }
         void OnTextBoxLeave(Object^ sender, EventArgs^ e) {
-            TextBox^ tb = safe_cast<TextBox^>(sender);
+            SetValue();
+        }
+        void SetValue() {
             int newValue;
             if (Int32::TryParse(txtbox->Text, newValue)) {
-                storeValue = newValue;  
-                //MessageBox::Show("New Value: " + newValue);
+                storeValue = newValue;
             }
             else {
-                //MessageBox::Show("Error! Please type numeric");
-                txtbox->Text = newValue.ToString(); 
+                txtbox->Text = newValue.ToString();
             }
         }
+        void OnKeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e)
+        {
+            if (e->KeyCode == Keys::Enter) {
+                e->SuppressKeyPress = true;
+                SetValue();
+                txtbox->Enabled = false;
+                txtbox->Enabled = true;
+            }
+			
+        }
+        
     };
 };
+
