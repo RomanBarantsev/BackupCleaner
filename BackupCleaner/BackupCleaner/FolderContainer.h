@@ -34,7 +34,7 @@ namespace BackupCleaner {
             BtnDeleteFolder = gcnew Button();
             BtnDeleteFolder->Size = System::Drawing::Size(50, 50);
             BtnDeleteFolder->Location = Point(0, 0);
-            BtnDeleteFolder->Text = "Delete Folder";
+            BtnDeleteFolder->Text = "Delete Task";
             BtnDeleteFolder->Click += gcnew EventHandler(this, &FolderContainer::OnBtnDeleteDataClick);
             this->Controls->Add(BtnDeleteFolder);
 
