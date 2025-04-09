@@ -114,6 +114,8 @@ namespace BackupCleaner {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+
+			this->Icon = gcnew System::Drawing::Icon("backup.ico");
 			containers = gcnew System::Collections::Generic::List<FolderContainer^>();
 			this->SuspendLayout();
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
