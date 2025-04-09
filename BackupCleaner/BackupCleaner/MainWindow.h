@@ -3,6 +3,8 @@
 #include "FolderData.h"
 #include "FolderContainer.h"
 
+#include "resource.h"
+
 #include <msclr\marshal_cppstd.h>
 #include <msclr/marshal.h>
 
@@ -114,13 +116,13 @@ namespace BackupCleaner {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-
-			this->Icon = gcnew System::Drawing::Icon("backup.ico");
 			containers = gcnew System::Collections::Generic::List<FolderContainer^>();
 			this->SuspendLayout();
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(600, 600);
+			IntPtr iconHandle = IntPtr(LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1)));
+			this->Icon = System::Drawing::Icon::FromHandle(iconHandle);
 			this->ResumeLayout(false);
 			// NEW FOLDER PANEL
 			{
