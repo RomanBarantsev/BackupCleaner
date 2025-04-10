@@ -23,8 +23,9 @@ This is especially useful for automated backup systems, log folders, or temp sto
 ## 💻 UI Preview
 ![image](https://github.com/user-attachments/assets/3a1cc4ea-34d5-4ee8-827c-8f1b3e6f53d0)
 
-
-
+## Requirements
+Program require visual c++ redistributable 2015-2022 to be installed. Official Microsoft download page [
+https://aka.ms/vs/17/release/vc_redist.x64.exe](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022)
 ---
 
 ## 🚀 Getting Started
