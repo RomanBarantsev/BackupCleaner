@@ -28,13 +28,13 @@ namespace BackupCleaner {
     public:
         FolderContainer(System::String^ folder,FolderData* fdata) {
             data = fdata;
-            this->Size = System::Drawing::Size(500, 70);
+            this->Size = System::Drawing::Size(400, 100);
             this->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
             // Delete button
             BtnDeleteFolder = gcnew Button();
             BtnDeleteFolder->Size = System::Drawing::Size(50, 50);
             BtnDeleteFolder->Location = Point(0, 0);
-            BtnDeleteFolder->Text = "Delete Folder";
+            BtnDeleteFolder->Text = "Delete Task";
             BtnDeleteFolder->Click += gcnew EventHandler(this, &FolderContainer::OnBtnDeleteDataClick);
             this->Controls->Add(BtnDeleteFolder);
 
@@ -55,12 +55,17 @@ namespace BackupCleaner {
             BtnSelectFolder->Click += gcnew EventHandler(this, &FolderContainer::OnBtnSelectFolderClick);
             this->Controls->Add(BtnSelectFolder);
 
-            int xStartPos = 60;
+            int xStartPos = 50;
             int yStartPos = 20;
-            int xMargins=20;
+            int xMargin=200;
+            int yMargin=25;
             System::String^ daysTooltip = "days for which files will be stored";
+            System::String^ countTooltip = "count of files which will be stored";
+            System::String^ weightTooltip = "folder size which will be stored(MB)";
             //txtlabel
             TxtBoxAndLabel^ daysTxtLabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos, this, daysTooltip, data->daysToStore, "days");
+            TxtBoxAndLabel^ countTxtLabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos+=yMargin, this, countTooltip, data->countFiles, "count");
+            TxtBoxAndLabel^ weightTxtLabel = gcnew TxtBoxAndLabel(xStartPos, yStartPos += yMargin, this, weightTooltip, data->folderSize, "weight");
         }
 
     private:

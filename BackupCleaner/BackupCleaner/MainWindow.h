@@ -3,6 +3,8 @@
 #include "FolderData.h"
 #include "FolderContainer.h"
 
+#include "resource.h"
+
 #include <msclr\marshal_cppstd.h>
 #include <msclr/marshal.h>
 
@@ -46,7 +48,8 @@ namespace BackupCleaner {
 
 	private:
 		System::Collections::Generic::List<FolderContainer^>^ containers;
-		Panel^ flowPanel;
+		TableLayoutPanel^ tablePanel;
+		Panel^ scrollPanel;
 		StoreData* Folders;
 		Panel^ pathPanel;
 		TextBox^ folderPath;
@@ -60,7 +63,7 @@ namespace BackupCleaner {
 			container->OnDeleteContainer += gcnew FolderContainer::DeleteContainerHandler(this, &MainWindow::RemoveContainer);
 			container->OnChangeContainerKeyContainer += gcnew FolderContainer::ChangeContainerKeyHandler(this, &MainWindow::ChangeContainerKey);
 			containers->Add(container);
-			flowPanel->Controls->Add(container);
+			tablePanel->Controls->Add(container);
 			UpdateLayout();
 		}
 		// Method to add a new container
@@ -86,7 +89,7 @@ namespace BackupCleaner {
 			//--------------
 			if (containers->Contains(container)) {
 				containers->Remove(container);
-				flowPanel->Controls->Remove(container);
+				tablePanel->Controls->Remove(container);
 				delete container;  // Calls destructor
 				UpdateLayout();
 			}
@@ -117,7 +120,9 @@ namespace BackupCleaner {
 			this->SuspendLayout();
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1200, 600);
+			this->ClientSize = System::Drawing::Size(600, 600);
+			IntPtr iconHandle = IntPtr(LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1)));
+			this->Icon = System::Drawing::Icon::FromHandle(iconHandle);
 			this->ResumeLayout(false);
 			// NEW FOLDER PANEL
 			{
@@ -148,12 +153,24 @@ namespace BackupCleaner {
 				BtnAddFolder->Click += gcnew EventHandler(this, &MainWindow::OnBtnAddClick);
 				pathPanel->Controls->Add(BtnAddFolder);
 			}
-			// --- Add FlowLayoutPanel
-			flowPanel = gcnew Panel();
-			flowPanel->Size = System::Drawing::Size(1200, this->ClientSize.Height - pathPanel->Height);  // ✅ Adjust height dynamically
-			flowPanel->Location = System::Drawing::Point(0, pathPanel->Height);  // ✅ Place below pathPanel
-			flowPanel->Anchor = AnchorStyles::Top | AnchorStyles::Left | AnchorStyles::Right | AnchorStyles::Bottom;  // ✅ Adjust on resize			
-			this->Controls->Add(flowPanel);
+			// Panel with scrollbar
+			scrollPanel = gcnew Panel();
+			scrollPanel->Dock = DockStyle::Fill;
+			scrollPanel->AutoScroll = true;
+			scrollPanel->Location = System::Drawing::Point(0, pathPanel->Height);
+			scrollPanel->Size = System::Drawing::Size(this->ClientSize.Width, this->ClientSize.Height - pathPanel->Height);
+			scrollPanel->Anchor = AnchorStyles::Top | AnchorStyles::Left | AnchorStyles::Right | AnchorStyles::Bottom;
+
+			// Table inside scroll panel
+			tablePanel = gcnew TableLayoutPanel();
+			tablePanel->ColumnCount = 1;
+			tablePanel->RowCount = 0;
+			tablePanel->Dock = DockStyle::Top;
+			tablePanel->AutoSize = true;
+			tablePanel->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+
+			scrollPanel->Controls->Add(tablePanel);
+			this->Controls->Add(scrollPanel);
 
 			//----- FOLDER CONTAINER
 			this->Text = "Backup Deleter";

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "MainWindow.h"
 
 namespace BackupCleaner {
 ref class FolderContainer;
@@ -12,54 +13,70 @@ using namespace System::Drawing;
 
     public ref class TxtBoxAndLabel : public Panel {
     private:
-        static const int spacing{ 20 };
-        static const int xSize{ 50 };
-        static const int ySize{ 25 };
+        static const int spacing{ 50 };
+        static const int TXTxSize{ 50 };
+        static const int TXTySize{ 25 }; 
+        static const int LBLxSize{ 200 };
+        static const int LBLySize{ 25 };
         //--------------------------------
         Label^ lbl;
         TextBox^ txtbox;
         ToolTip^ tTip;
         int& storeValue;
-        FolderContainer^ parentPanel;
+        Panel^ parentPanel;
     public:
-        TxtBoxAndLabel(int xPosition, int yPosition, Panel^ panel, System::String^ tooltip, int& txtBox, std::string label) :
-            storeValue(txtBox) {
-            InitializeComponent(xPosition, yPosition, panel, tooltip, txtBox, label);
+        TxtBoxAndLabel(int xPosition, int yPosition, Panel^ parent, System::String^ tooltip, int& value, std::string label) :
+            storeValue(value) {
+            InitializeComponent(xPosition, yPosition, parent, tooltip, value, label);
         }
     private:
         void InitializeComponent(int xPos, int yPos, Panel^ panel, System::String^ tooltip, int& txtBox, std::string& label) {
             //lbl
             lbl = gcnew Label();
-            lbl->Size = System::Drawing::Size(xSize, ySize);
+            lbl->Size = System::Drawing::Size(LBLxSize, LBLySize);
             lbl->Location = Point(xPos, yPos);
             System::String^ sysStr = tooltip;
             lbl->Text = sysStr;
 
             //File Size Text
             txtbox = gcnew TextBox();
-            txtbox->Size = System::Drawing::Size(xSize, ySize);
-            txtbox->Location = Point(xPos, yPos + spacing);
+            txtbox->Size = System::Drawing::Size(TXTxSize, TXTySize);
+            txtbox->Location = Point(xPos+LBLxSize, yPos);
             System::String^ str = System::Convert::ToString(txtBox);
             txtbox->Text = str;
             txtbox->Leave += gcnew EventHandler(this, &TxtBoxAndLabel::OnTextBoxLeave);
+            txtbox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &TxtBoxAndLabel::OnKeyDown);
             //ToolTip
             tTip = gcnew ToolTip();
             str = tooltip;
             tTip->SetToolTip(lbl, str);
+            parentPanel = panel;
             panel->Controls->Add(txtbox);
             panel->Controls->Add(lbl);
         }
         void OnTextBoxLeave(Object^ sender, EventArgs^ e) {
-            TextBox^ tb = safe_cast<TextBox^>(sender);
+            SetValue();
+        }
+        void SetValue() {
             int newValue;
             if (Int32::TryParse(txtbox->Text, newValue)) {
-                storeValue = newValue;  // Записываем значение
-                MessageBox::Show("Новое значение: " + newValue);
+                storeValue = newValue;
             }
             else {
-                MessageBox::Show("Ошибка! Введите число.");
-                txtbox->Text = newValue.ToString();  // Восстанавливаем старое значение
+                txtbox->Text = newValue.ToString();
             }
         }
+        void OnKeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e)
+        {
+            if (e->KeyCode == Keys::Enter) {
+                e->SuppressKeyPress = true;
+                SetValue();
+                txtbox->Enabled = false;
+                txtbox->Enabled = true;
+            }
+			
+        }
+        
     };
 };
+

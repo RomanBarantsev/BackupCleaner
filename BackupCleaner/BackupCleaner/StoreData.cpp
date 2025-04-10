@@ -7,12 +7,12 @@ void StoreData::saveToFile(const std::string& filename) {
     }
 
     size_t size = Folders.size();
-    file.write((char*)&size, sizeof(size_t));  // Записываем количество папок
+    file.write((char*)&size, sizeof(size_t));  // count of folders
 
     for (const auto& pair : Folders) {
         size_t pathSize = pair.first.size();
-        file.write((char*)&pathSize, sizeof(size_t));  // Длина пути
-        file.write(pair.first.c_str(), pathSize);      // Сам путь
+        file.write((char*)&pathSize, sizeof(size_t));  // path lenght
+        file.write(pair.first.c_str(), pathSize);      // path itself
 
         file.write((char*)&pair.second->daysToStore, sizeof(int));
         file.write((char*)&pair.second->folderSize, sizeof(int));
@@ -29,14 +29,15 @@ void StoreData::loadFromFile(const std::string& filename) {
     }
 
     size_t size;
-    file.read((char*)&size, sizeof(size_t));  // Читаем количество папок
-
+    file.read((char*)&size, sizeof(size_t));  // reading how many folders are
+    if (size == SIZE_MAX)
+        return;
     for (size_t i = 0; i < size; i++) {
         size_t pathSize;
-        file.read((char*)&pathSize, sizeof(size_t));  // Читаем длину пути
+        file.read((char*)&pathSize, sizeof(size_t));  // reading length of path
 
         std::string path(pathSize, '\0');
-        file.read(&path[0], pathSize);  // Читаем сам путь
+        file.read(&path[0], pathSize);  // reading path
 
         int daysToStore, folderSize, countFiles;
         file.read((char*)&daysToStore, sizeof(int));
@@ -56,23 +57,14 @@ void StoreData::loadFromFile(const std::string& filename) {
      catch (std::exception) {
          namespace fs = std::filesystem;
          fs::path filePath = fs::current_path() / fileName;
-         if(fs::exists(filePath)) {
-             fs::remove(filePath);
-         }         
-    }
-}
-
- StoreData::~StoreData() {
-     try {
-         saveToFile(fileName);
-     }
-     catch (std::exception) {
-         namespace fs = std::filesystem;
-         fs::path filePath = fs::current_path() / fileName;
          if (fs::exists(filePath)) {
              fs::remove(filePath);
          }
-     }    
+     }
+}
+
+ StoreData::~StoreData() {
+    saveToFile("StoreData.dat");
      for (auto& folder : Folders)
      {
          delete folder.second;
